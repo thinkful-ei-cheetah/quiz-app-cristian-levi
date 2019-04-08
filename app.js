@@ -35,39 +35,73 @@ class Quiz {
         this.active = false;
     }
 
-    resetQuiz() {
-        this.active = false;
-        this.score = 0;
-        this.asked = [];
+    reset() {
+        this.scoreHistory.push(this.score);
         this.unasked = [];
-    };
+        this.asked = [];
+        this.score = 0;
+        this.active = false;
+    }
 
-    startQuiz() {
+    start() {
         this.active = true;
-        this.unasked = trivia.returnQuestions();
-    };
+        this.unasked = [new Question('what is 2 + 2', ['2', '3', '4'], '4'), new Question('what is 2 + 2', ['2', '3', '4'], '4'), new Question('what is 2 + 2', ['2', '3', '4'], '4'), new Question('what is 2 + 2', ['2', '3', '4'], '4')];
+    }
 
-    submitAnswer() {
-
-    };
-
-    askedQuestion() {
+    ask() {
         this.asked.push(this.unasked.pop());
-    };
+        return this.asked[this.asked.length -1];
+    }
 
+    submitAnswer(answer) {
+        // uddate useranswer in the question
+        // check if it is unanswered --> throw error
+        // incorrect or correct --> update score
+        const currQuestion = this.asked[this.asked.length -1];
+        currQuestion.userAnswer = answer;
+        if (currQuestion.answerStatus() === -1) {
+            throw new Error('Must answer question!!!');
+        }
+        else {
+            this.score += currQuestion.answerStatus();
+            if (this.unasked.length === 0) {
+                this.active = false;
+            }
+        }
+    }
 
+    highScore() {
+        return this.scoreHistory.find((a, b) => b - a);
+    }
+
+    progress() {
+        if (this.active === false) {
+            return "Inactive";
+        }
+        else {
+            const total = this.asked.length +  this.unasked.length;
+            return `${this.asked.length} of ${total}`;
+        }
+    }
 
 }
 
 // api
 
 class TriviaApi {
-    returnQuestions() {
-        return [new Question('what is 2 +2', ['2', '3', '4'], '4'), new Question('what is 2 +2', ['2', '3', '4'], '4'), new Question('what is 2 +2', ['2', '3', '4'], '4'), new Question('what is 2 +2', ['2', '3', '4'], '4')]
+    constructor() {
+        const BASE_URL = "https://opentdb.com/api.php?amount=5&token=";
+        const token = fetch("https://opentdb.com/api_token.php?command=request")
+        .then(res => res.json())
+        .then(data => data.token);
+
+        this.getQuestions = function() {return fetch(BASE_URL + "5ffaf0ee979060219ce8a08b21fdcac01b67a008147b98c4736f2a7bcccfb824")
+        .then(res => res.json())
+        .then(res => res.results);
+        };
     }
 }
 
-const trivia = new TriviaApi;
+let t = new TriviaApi;
 
-const test = new Quiz;
-
+console.log(t.getQuestions());

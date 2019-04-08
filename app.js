@@ -4,7 +4,7 @@
 class Question {
     constructor(text, answers, correctAnswer) {
         this.text = text;
-        this.answers = answers;
+        this.answers = this.shuffle(answers);
         this.correctAnswer = correctAnswer;
         this.userAnswer = null;
     }
@@ -21,6 +21,13 @@ class Question {
         else {
             return 1;
         }
+    }
+    shuffle(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
     }
 }
 
@@ -45,7 +52,8 @@ class Quiz {
 
     start() {
         this.active = true;
-        this.unasked = [new Question('what is 2 + 2', ['2', '3', '4'], '4'), new Question('what is 2 + 2', ['2', '3', '4'], '4'), new Question('what is 2 + 2', ['2', '3', '4'], '4'), new Question('what is 2 + 2', ['2', '3', '4'], '4')];
+        let newQuestions = new TriviaApi(); 
+        newQuestions.getQuestions().then(() => this.unasked = [...newQuestions.questions]);
     }
 
     ask() {
@@ -90,18 +98,28 @@ class Quiz {
 
 class TriviaApi {
     constructor() {
-        const BASE_URL = "https://opentdb.com/api.php?amount=5&token=";
-        const token = fetch("https://opentdb.com/api_token.php?command=request")
+        this.BASE_URL = "https://opentdb.com/api.php?amount=5&token=";
+        this.token = null;
+        this.questions = [];
+    }
+    getToken() {
+        if (this.token) {
+            return Promise.resolve(this.token);
+        }
+        else {
+            return fetch("https://opentdb.com/api_token.php?command=request")
+            .then(res => res.json())
+            .then(data => data.token);
+        }
+    }
+    getQuestions() {
+        return this.getToken()
+        .then(token => fetch(this.BASE_URL + token))
         .then(res => res.json())
-        .then(data => data.token);
-
-        this.getQuestions = function() {return fetch(BASE_URL + "5ffaf0ee979060219ce8a08b21fdcac01b67a008147b98c4736f2a7bcccfb824")
-        .then(res => res.json())
-        .then(res => res.results);
-        };
+        .then(data => this.questions = data.results.map(q => new Question(q.question, [...q["incorrect_answers"], q["correct_answer"]], q["correct_answer"])));
+        // .then(data => this.questions = [...data.results]);
     }
 }
 
-let t = new TriviaApi;
-
-console.log(t.getQuestions());
+let t = new TriviaApi();
+t.getQuestions().then(() => console.log(t.questions));

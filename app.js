@@ -24,14 +24,46 @@ class Question {
     }
 }
 
-// api
-
-class TriviaApi {
-
-}
-
 // quiz
 
 class Quiz {
+    constructor() {
+        this.unasked = [];
+        this.asked = [];
+        this.score = 0;
+        this.scoreHistory = [];
+        this.active = false;
+    }
+
+    resetQuiz() {
+        this.active = false;
+        this.score = 0;
+        this.asked = [];
+        this.unasked = [];
+    };
+
+    startQuiz() {
+        this.active = true;
+        this.unasked = returnQuestions();
+    };
+
+    submitAnswer() {
+
+    };
+
+    askedQuestion() {
+        this.asked.push(this.unasked.pop());
+    };
+
+
 
 }
+
+// api
+
+class TriviaApi {
+    returnQuestions() {
+        return [Question('what is 2 +2', ['2', '3', '4'], '4'), Question('what is 2 +2', ['2', '3', '4'], '4'), Question('what is 2 +2', ['2', '3', '4'], '4'), Question('what is 2 +2', ['2', '3', '4'], '4')]
+    }
+}
+

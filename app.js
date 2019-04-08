@@ -44,7 +44,7 @@ class Quiz {
 
     startQuiz() {
         this.active = true;
-        this.unasked = returnQuestions();
+        this.unasked = trivia.returnQuestions();
     };
 
     submitAnswer() {
@@ -63,7 +63,11 @@ class Quiz {
 
 class TriviaApi {
     returnQuestions() {
-        return [Question('what is 2 +2', ['2', '3', '4'], '4'), Question('what is 2 +2', ['2', '3', '4'], '4'), Question('what is 2 +2', ['2', '3', '4'], '4'), Question('what is 2 +2', ['2', '3', '4'], '4')]
+        return [new Question('what is 2 +2', ['2', '3', '4'], '4'), new Question('what is 2 +2', ['2', '3', '4'], '4'), new Question('what is 2 +2', ['2', '3', '4'], '4'), new Question('what is 2 +2', ['2', '3', '4'], '4')]
     }
 }
+
+const trivia = new TriviaApi;
+
+const test = new Quiz;
 

@@ -16,11 +16,11 @@ class Quiz extends Model {          // eslint-disable-line no-unused-vars
     this.unasked = [];
     this.asked = [];
     this.score = 0;
-    this.scoreHistory = [];
+    this.scoreHistory = [0, 0];
     this.active = false;
   }
 
-    reset() {
+    resetGame() {
         this.scoreHistory.push(this.score);
         this.unasked = [];
         this.asked = [];
@@ -28,13 +28,13 @@ class Quiz extends Model {          // eslint-disable-line no-unused-vars
         this.active = false;
     }
 
-    start() {
+    startNewGame() {
         this.active = true;
         let newQuestions = new TriviaApi(Quiz.DEFAULT_QUIZ_LENGTH); 
         newQuestions.getQuestions().then(() => this.unasked = [...newQuestions.questions]);
     }
 
-    ask() {
+    askNextQuestion() {
         this.asked.push(this.unasked.pop());
         return this.asked[this.asked.length -1];
     }
@@ -70,6 +70,3 @@ class Quiz extends Model {          // eslint-disable-line no-unused-vars
         }
     }
 }
-
-let test = new Quiz();
-test.start();

@@ -32,12 +32,11 @@ class Quiz extends Model {          // eslint-disable-line no-unused-vars
     startNewGame() {
         this.active = true;
         let newQuestions = new TriviaApi(Quiz.DEFAULT_QUIZ_LENGTH); 
-        newQuestions.getQuestions().then(() => this.unasked = [...newQuestions.questions]);
+        return newQuestions.getQuestions().then(() => this.unasked = [...newQuestions.questions]);
     }
 
     askNextQuestion() {
         this.asked.push(this.unasked.pop());
-        return this.currQuestion();
     }
 
     currQuestion() {

@@ -6,6 +6,8 @@ class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars
     return {
       'click .start': 'handleStart',
       'click .play-again': 'handlePlayAgain',
+      'submit .question-submit': 'handleQuestionSubmit',
+      'click .continue': 'handleReviewContinue'
     };
   }
 
@@ -28,11 +30,11 @@ class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars
   _generateQuestion() {
     return `
       <form class="question-form">
-        <label for="question-choices">${this.model.askNextQuestion().text}</label>
-        <input type="radio" name="question-choices" value="${this.model.askNextQuestion().answers[0]}">${this.model.askNextQuestion().answers[0]}</input>
-        <input type="radio" name="question-choices" value="${this.model.askNextQuestion().answers[1]}">${this.model.askNextQuestion().answers[1]}</input>
-        <input type="radio" name="question-choices" value="${this.model.askNextQuestion().answers[2]}">${this.model.askNextQuestion().answers[2]}</input>
-        <input type="radio" name="question-choices" value="${this.model.askNextQuestion().answers[3]}">${this.model.askNextQuestion().answers[3]}</input>
+        <label for="question-choices">${this.model.currQuestion().text}</label>
+        <input type="radio" name="question-choices" value="${this.model.currQuestion().answers[0]}">${this.model.currQuestion().answers[0]}</input>
+        <input type="radio" name="question-choices" value="${this.model.currQuestion().answers[1]}">${this.model.currQuestion().answers[1]}</input>
+        <input type="radio" name="question-choices" value="${this.model.currQuestion().answers[2]}">${this.model.currQuestion().answers[2]}</input>
+        <input type="radio" name="question-choices" value="${this.model.currQuestion().answers[3]}">${this.model.currQuestion().answers[3]}</input>
         <button type="submit" class="question-submit">Submit</button>
       </form>
     `;
@@ -108,13 +110,26 @@ class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars
   }
 
   handleStart() {
-    this.model.startNewGame();
-    this.model.update();
-  }
+    this.model.startNewGame()
+    .then(() => this.model.askNextQuestion())
+    .then(() => this.model.update());
+  };
 
   handlePlayAgain() {
     this.model.resetGame();
     this.model.startNewGame();
     this.model.update();
-  }
+  };
+
+  handleQuestionSubmit() {
+    this.model.submitAnswer(answer);
+    this.model.update();
+  };
+
+  handleReviewContinue() {
+    this.model.askNextQuestion();
+    this.model.update();
+  };
+
+
 }

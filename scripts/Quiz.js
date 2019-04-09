@@ -11,7 +11,7 @@ class Quiz extends Model {          // eslint-disable-line no-unused-vars
 
   // This class property could be used to determine the no. of quiz questions
   // In later implementations, the user could provide a quiz length and override
-  static DEFAULT_QUIZ_LENGTH = '12';
+  static DEFAULT_QUIZ_LENGTH = '3';
 
   constructor() {
     super();    
@@ -47,16 +47,16 @@ class Quiz extends Model {          // eslint-disable-line no-unused-vars
         // uddate useranswer in the question
         // check if it is unanswered --> throw error
         // incorrect or correct --> update score
-        const currQuestion = this.submitAnswer();
+        const currQuestion = this.currQuestion();
         currQuestion.userAnswer = answer;
         if (currQuestion.answerStatus() === -1) {
             throw new Error('Must answer question!!!');
         }
         else {
             this.score += currQuestion.answerStatus();
-            if (this.unasked.length === 0) {
-                this.active = false;
-            }
+            // if (this.unasked.length === 0) {
+            //     this.active = false;
+            // }
         }
     }
 

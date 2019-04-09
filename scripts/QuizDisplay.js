@@ -6,7 +6,7 @@ class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars
     return {
       'click .start': 'handleStart',
       'click .play-again': 'handlePlayAgain',
-      'submit .question-submit': 'handleQuestionSubmit',
+      'submit .question-form': 'handleQuestionSubmit',
       'click .continue': 'handleReviewContinue'
     };
   }
@@ -43,12 +43,12 @@ class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars
   _generateReviewCorrect() {
     return `
       <div>
-        <h2>${this.model.askNextQuestion().text}<h2>
+        <h2>${this.model.currQuestion().text}<h2>
         <p>
           You got it!<br>The correct answer was:
         </p>
         <p class="correct-answer">
-          ${this.model.askNextQuestion().correctAnswer}
+          ${this.model.currQuestion().correctAnswer}
         </p>
       </div>
       <div>
@@ -60,18 +60,18 @@ class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars
   _generateReviewIncorrect() {
     return `
       <div>
-        <h2>${this.model.askNextQuestion().text}<h2>
+        <h2>${this.model.currQuestion().text}<h2>
         <p>
           Sorry, that's incorrect.<br>You answered:
         </p>
         <p class="incorrect-answer">
-          ${this.model.askNextQuestion().userAnswer}
+          ${this.model.currQuestion().userAnswer}
         </p>
         <p>
           The correct answer was:
         </p>
         <p class="correct-answer">
-          ${this.model.askNextQuestion().correctAnswer}
+          ${this.model.currQuestion().correctAnswer}
         </p>
       </div>
       <div>
@@ -102,9 +102,19 @@ class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars
   }
 
   template() {
-    if (this.model.active) {
+    if (this.model.active && this.model.currQuestion().answerStatus() === -1) {
       return this._generateQuestion();
-    } else {
+    } 
+    else if (this.model.active && this.model.currQuestion().answerStatus() === 0) {
+      return this._generateReviewIncorrect();
+    }
+    else if (this.model.active && this.model.currQuestion().answerStatus() === 1) {
+      return this._generateReviewCorrect();
+    }
+    // else if () {
+
+    // }
+    else {
       return this._generateIntro();
     }
   }
@@ -113,23 +123,25 @@ class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars
     this.model.startNewGame()
     .then(() => this.model.askNextQuestion())
     .then(() => this.model.update());
-  };
+  }
 
   handlePlayAgain() {
     this.model.resetGame();
     this.model.startNewGame();
     this.model.update();
-  };
+  }
 
-  handleQuestionSubmit() {
+  handleQuestionSubmit(event) {
+    console.log(event);
+    event.preventDefault();
+    const answer = $("input[name='question-choices']:checked").val();
     this.model.submitAnswer(answer);
     this.model.update();
-  };
+  }
 
   handleReviewContinue() {
     this.model.askNextQuestion();
     this.model.update();
-  };
-
+  }
 
 }

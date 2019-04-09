@@ -1,3 +1,4 @@
+'use strict';
 /* global Renderer */
 
 class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars

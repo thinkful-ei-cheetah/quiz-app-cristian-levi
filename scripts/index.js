@@ -1,3 +1,4 @@
+'use strict';
 /* global Quiz, QuizDisplay, QuizStatus */
 
 // By putting these variables in global scope, you can experiment with them in

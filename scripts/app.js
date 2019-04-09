@@ -33,7 +33,7 @@ class Question {
 
 // quiz
 
-class Quiz {
+class OurQuiz {
     constructor() {
         this.unasked = [];
         this.asked = [];

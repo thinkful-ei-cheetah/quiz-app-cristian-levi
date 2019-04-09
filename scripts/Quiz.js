@@ -5,22 +5,71 @@
  * provided as an example.
  */
 
-// class Quiz extends Model {          // eslint-disable-line no-unused-vars
+class Quiz extends Model {          // eslint-disable-line no-unused-vars
 
-//   // This class property could be used to determine the no. of quiz questions
-//   // In later implementations, the user could provide a quiz length and override
-//   static DEFAULT_QUIZ_LENGTH = 5;
+  // This class property could be used to determine the no. of quiz questions
+  // In later implementations, the user could provide a quiz length and override
+  static DEFAULT_QUIZ_LENGTH = '12';
 
-//   constructor() {
-//     super();
+  constructor() {
+    super();    
+    this.unasked = [];
+    this.asked = [];
+    this.score = 0;
+    this.scoreHistory = [];
+    this.active = false;
+  }
 
-//     // Your Quiz model's constructor logic should go here. There is just examples below.
-//     this.active = false;
-//     this.questions = [{ id: 1, text: 'Question 1' }];
-//   }
+    reset() {
+        this.scoreHistory.push(this.score);
+        this.unasked = [];
+        this.asked = [];
+        this.score = 0;
+        this.active = false;
+    }
 
-//   startNewGame() {
-//     this.active = true;
-//   }
+    start() {
+        this.active = true;
+        let newQuestions = new TriviaApi(Quiz.DEFAULT_QUIZ_LENGTH); 
+        newQuestions.getQuestions().then(() => this.unasked = [...newQuestions.questions]);
+    }
 
-// }
+    ask() {
+        this.asked.push(this.unasked.pop());
+        return this.asked[this.asked.length -1];
+    }
+
+    submitAnswer(answer) {
+        // uddate useranswer in the question
+        // check if it is unanswered --> throw error
+        // incorrect or correct --> update score
+        const currQuestion = this.asked[this.asked.length -1];
+        currQuestion.userAnswer = answer;
+        if (currQuestion.answerStatus() === -1) {
+            throw new Error('Must answer question!!!');
+        }
+        else {
+            this.score += currQuestion.answerStatus();
+            if (this.unasked.length === 0) {
+                this.active = false;
+            }
+        }
+    }
+
+    highScore() {
+        return this.scoreHistory.find((a, b) => b - a);
+    }
+
+    progress() {
+        if (this.active === false) {
+            return "Inactive";
+        }
+        else {
+            const total = this.asked.length +  this.unasked.length;
+            return `${this.asked.length} of ${total}`;
+        }
+    }
+}
+
+let test = new Quiz();
+test.start();

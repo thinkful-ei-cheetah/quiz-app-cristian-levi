@@ -1,3 +1,4 @@
+'use strict';
 class TriviaApi {
     constructor(questionCount) {
         this.BASE_URL = `https://opentdb.com/api.php?amount=${questionCount}&token=`;

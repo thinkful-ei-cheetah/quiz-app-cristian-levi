@@ -1,3 +1,5 @@
+'use strict';
+/* global Model */
 /* global Model */
 
 /**
@@ -25,7 +27,6 @@ class Quiz extends Model {          // eslint-disable-line no-unused-vars
         this.unasked = [];
         this.asked = [];
         this.score = 0;
-        this.active = false;
     }
 
     startNewGame() {
@@ -36,14 +37,18 @@ class Quiz extends Model {          // eslint-disable-line no-unused-vars
 
     askNextQuestion() {
         this.asked.push(this.unasked.pop());
-        return this.asked[this.asked.length -1];
+        return this.currQuestion();
+    }
+
+    currQuestion() {
+      return this.asked[this.asked.length - 1];
     }
 
     submitAnswer(answer) {
         // uddate useranswer in the question
         // check if it is unanswered --> throw error
         // incorrect or correct --> update score
-        const currQuestion = this.asked[this.asked.length -1];
+        const currQuestion = this.submitAnswer();
         currQuestion.userAnswer = answer;
         if (currQuestion.answerStatus() === -1) {
             throw new Error('Must answer question!!!');

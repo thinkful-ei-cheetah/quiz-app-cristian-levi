@@ -1,3 +1,4 @@
+'use strict';
 class Question {
     constructor(text, answers, correctAnswer) {
         this.text = text;

@@ -26,15 +26,17 @@ class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars
       </div>
     `;
   }
-
+  //loop through answers and generate radio buttons for each one
   _generateQuestion() {
+    let answerElem = "";
+    for (let i = 0; i < this.model.currQuestion().answers.length; i++) {
+      let q = this.model.currQuestion().answers[i];
+      answerElem += `<input type="radio" name="question-choices" value="${q}" required>${q}</input>`;
+    }
     return `
-      <form class="question-form">
+      <form class="question-form" >
         <label for="question-choices">${this.model.currQuestion().text}</label>
-        <input type="radio" name="question-choices" value="${this.model.currQuestion().answers[0]}">${this.model.currQuestion().answers[0]}</input>
-        <input type="radio" name="question-choices" value="${this.model.currQuestion().answers[1]}">${this.model.currQuestion().answers[1]}</input>
-        <input type="radio" name="question-choices" value="${this.model.currQuestion().answers[2]}">${this.model.currQuestion().answers[2]}</input>
-        <input type="radio" name="question-choices" value="${this.model.currQuestion().answers[3]}">${this.model.currQuestion().answers[3]}</input>
+        ${answerElem}
         <button type="submit" class="question-submit">Submit</button>
       </form>
     `;
@@ -82,7 +84,7 @@ class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars
 
   _generateEnd() {
     let newHighScore = "";
-    if (this.model.highScore() === this.model.score) {
+    if (this.model.score > this.model.highScore()) {
       newHighScore = "That's a new high score!";
     }
     return `
@@ -111,9 +113,9 @@ class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars
     else if (this.model.active && this.model.currQuestion().answerStatus() === 1) {
       return this._generateReviewCorrect();
     }
-    // else if () {
-
-    // }
+    else if (!this.model.active && this.model.asked.length && !this.model.unasked.length) {
+      return this._generateEnd();
+    }
     else {
       return this._generateIntro();
     }
@@ -127,20 +129,26 @@ class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars
 
   handlePlayAgain() {
     this.model.resetGame();
-    this.model.startNewGame();
     this.model.update();
   }
 
   handleQuestionSubmit(event) {
-    console.log(event);
     event.preventDefault();
     const answer = $("input[name='question-choices']:checked").val();
     this.model.submitAnswer(answer);
+    if (this.model.currQuestion().answerStatus() === 1) {
+      this.model.score += 1;
+    }
     this.model.update();
   }
 
   handleReviewContinue() {
-    this.model.askNextQuestion();
+    if (this.model.unasked.length) {
+      this.model.askNextQuestion();
+    }
+    else {
+      this.model.active = false;
+    }
     this.model.update();
   }
 

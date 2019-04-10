@@ -18,12 +18,12 @@ class Quiz extends Model {          // eslint-disable-line no-unused-vars
     this.unasked = [];
     this.asked = [];
     this.score = 0;
-    this.scoreHistory = [0, 0];
+    this.scoreHistory = [0];
     this.active = false;
   }
 
     resetGame() {
-        this.scoreHistory.push(this.score);
+        this.scoreHistory.push(this.score)
         this.unasked = [];
         this.asked = [];
         this.score = 0;
@@ -44,24 +44,17 @@ class Quiz extends Model {          // eslint-disable-line no-unused-vars
     }
 
     submitAnswer(answer) {
-        // uddate useranswer in the question
-        // check if it is unanswered --> throw error
-        // incorrect or correct --> update score
-        const currQuestion = this.currQuestion();
-        currQuestion.userAnswer = answer;
-        if (currQuestion.answerStatus() === -1) {
-            throw new Error('Must answer question!!!');
-        }
-        else {
-            this.score += currQuestion.answerStatus();
-            // if (this.unasked.length === 0) {
-            //     this.active = false;
-            // }
-        }
+        this.currQuestion().userAnswer = answer;
     }
 
     highScore() {
-        return this.scoreHistory.find((a, b) => b - a);
+        return Math.max(...this.scoreHistory)
+        // if (this.scoreHistory.length === 2) {
+        //     return 0;
+        // }
+        // else {
+        //     return this.scoreHistory.find((a, b) => b - a);
+        // }
     }
 
     progress() {

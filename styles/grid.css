@@ -1,0 +1,55 @@
+    
+/* grid help from: https://blog.fullstackdigital.com/how-to-create-a-flawless-responsive-post-grid-with-flexbox-e5c7cc9d28e */
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.grid-row {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+}
+
+.grid-item {
+    /* height: 550px; */
+    -ms-flex: auto;
+    width: 200px;
+    position: relative;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.col-1 {
+    flex-basis: 33.33%;
+}
+
+.col-2 {
+    flex-basis: 66.66%;
+}
+
+.col-3 {
+    flex-basis: 100%;
+}
+
+/* @media (max-width: 1073px) {
+    .col-1, .col-2, .col-3, .col-4 {
+        flex-basis: 33.33%;
+    }
+} */
+
+@media (max-width: 750px) {
+    .col-1 {
+        flex-basis: 50%;
+    }
+   .col-2, .col-3 {
+        flex-basis: 100%;
+  }
+} 
+
+@media (max-width: 555px) {
+    .col-1, .col-2, .col-3 {
+        flex-basis: 100%;
+    }
+}

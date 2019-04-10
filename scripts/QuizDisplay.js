@@ -7,77 +7,81 @@ class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars
       'click .start': 'handleStart',
       'click .play-again': 'handlePlayAgain',
       'submit .question-form': 'handleQuestionSubmit',
-      'click .continue': 'handleReviewContinue'
+      'click .question-continue': 'handleReviewContinue'
     };
   }
 
   _generateIntro() {
     return `
-      <div>
-        <header role="banner">
+      <div class="grid-row">
+        <header role="banner" class="grid-item col-3">
           <h1>Welcome to the Trivia Quiz<h1>
         </header>
-        <p>
+        <p class="grid-row col-2">
           Test your smarts and see how high you can score!
         </p>
       </div>
-      <div>
-        <button class="start">Start</button>
-      </div>
+      <button class="grid-row grid-item col-2 start">Start</button>
     `;
   }
   //loop through answers and generate radio buttons for each one
   _generateQuestion() {
     let answerElem = "";
+    let option = "";
     for (let i = 0; i < this.model.currQuestion().answers.length; i++) {
+      option += "I";
       let q = this.model.currQuestion().answers[i];
-      answerElem += `<input type="radio" name="question-choices" value="${q}" required>${q}</input>`;
+      answerElem += `<div class="col-3"><input class="grid-item radio" type="radio" id="${option}" name="question-choices" value="${q}" required><label for="${option}" class="grid-item col-2 radio">${q}</label></div>`;
     }
     return `
-      <form class="question-form" >
-        <label for="question-choices">${this.model.currQuestion().text}</label>
+      <form class="grid-row question-form">
+        <label class="grid-item col-3 question-text" for="question-choices">${this.model.currQuestion().text}</label>
         ${answerElem}
-        <button type="submit" class="question-submit">Submit</button>
+        <button type="submit" class="grid-row grid-item col-2 question-submit">Submit</button>
       </form>
     `;
   }
 
   _generateReviewCorrect() {
     return `
-      <div>
-        <h2>${this.model.currQuestion().text}<h2>
-        <p>
-          You got it!<br>The correct answer was:
+      <div class="grid-row col-3">
+        <h2 class= "grid-item col-3 question-text">${this.model.currQuestion().text}<h2>
+        <p class="grid-row col-2 question-feedback">
+          You got it!
         </p>
-        <p class="correct-answer">
+        <p class="grid-row col-2 question-feedback">
+          The correct answer was:
+        </p>
+        <p class="grid-row col-2 question-correct">
           ${this.model.currQuestion().correctAnswer}
         </p>
       </div>
-      <div>
-        <button class="continue">Continue</button>
-      </div>
+      <button class="grid-row grid-item col-2 question-continue">Continue</button>
     `;
   }
 
   _generateReviewIncorrect() {
     return `
-      <div>
-        <h2>${this.model.currQuestion().text}<h2>
-        <p>
-          Sorry, that's incorrect.<br>You answered:
+      <div class="grid-row col-3">
+        <h2 class= "grid-item col-3 question-text">${this.model.currQuestion().text}<h2>
+        <p class="grid-row col-2 question-feedback">
+          Sorry, that's incorrect.
         </p>
-        <p class="incorrect-answer">
+        <p class="grid-row col-2 question-feedback">
+          You answered:
+        </p>
+        <p class="grid-row col-2 question-incorrect">
           ${this.model.currQuestion().userAnswer}
         </p>
-        <p>
+        <p class="grid-row col-2 question-feedback">
           The correct answer was:
         </p>
-        <p class="correct-answer">
+        <p class="grid-row col-2 question-correct">
           ${this.model.currQuestion().correctAnswer}
         </p>
       </div>
       <div>
-        <button class="continue">Continue</button>
+        <button class="grid-row grid-item col-2 question-continue">Continue</button>
       </div>
     `;
   }
@@ -88,18 +92,18 @@ class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars
       newHighScore = "That's a new high score!";
     }
     return `
-      <div>
-        <h2>Good job!<h2>
-        <p>
-          Your final score was ${this.model.score} out of ${this.model.asked.length}
+      <div class="grid-row">
+        <div class="grid-item col-3">
+          <h2>Good job!<h2>
+        </div>
+        <p class="grid-row col-2">
+          Your final score was<br>${this.model.score} out of ${this.model.asked.length}
         </p>
-        <p>
+        <p class="grid-row col-2 new-high-score">
           ${newHighScore}
         </p>
       </div>
-      <div>
-        <button class="play-again">Play Again</button>
-      </div>
+      <button class="grid-row grid-item col-2 play-again">Play Again</button>
     `;
   }
 

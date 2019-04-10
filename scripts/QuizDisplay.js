@@ -111,9 +111,9 @@ class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars
     else if (this.model.active && this.model.currQuestion().answerStatus() === 1) {
       return this._generateReviewCorrect();
     }
-    // else if () {
-
-    // }
+    else if (this.model.active === false && this.model.score !== 0) {
+      return this._generateEnd();
+    }
     else {
       return this._generateIntro();
     }
@@ -140,7 +140,12 @@ class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars
   }
 
   handleReviewContinue() {
-    this.model.askNextQuestion();
+    if (this.model.unasked.length > 0) {
+      this.model.askNextQuestion();
+    }
+    else {
+      this.model.active = false;
+    }
     this.model.update();
   }
 

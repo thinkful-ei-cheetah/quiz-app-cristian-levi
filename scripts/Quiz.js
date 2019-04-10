@@ -11,7 +11,7 @@ class Quiz extends Model {          // eslint-disable-line no-unused-vars
 
   // This class property could be used to determine the no. of quiz questions
   // In later implementations, the user could provide a quiz length and override
-  static DEFAULT_QUIZ_LENGTH = '3';
+  static DEFAULT_QUIZ_LENGTH = '5';
 
   constructor() {
     super();    

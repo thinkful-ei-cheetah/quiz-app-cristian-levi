@@ -14,8 +14,8 @@ class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars
   _generateIntro() {
     return `
       <div class="grid-row">
-        <header role="banner" class="grid-item col-3">
-          <h1>Welcome to the Trivia Quiz<h1>
+        <header class="grid-item col-3">
+          <h1>Welcome to the Trivia Quiz</h1>
         </header>
         <p class="grid-row col-2">
           Test your smarts and see how high you can score!
@@ -35,6 +35,7 @@ class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars
     }
     return `
       <form class="grid-row question-form">
+        <h1>Question ${this.model.asked.length}:</h1>
         <label class="grid-item col-3 question-text" for="question-choices">${this.model.currQuestion().text}</label>
         ${answerElem}
         <button type="submit" class="grid-row grid-item col-2 question-submit">Submit</button>
@@ -45,7 +46,7 @@ class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars
   _generateReviewCorrect() {
     return `
       <div class="grid-row col-3">
-        <h2 class= "grid-item col-3 question-text">${this.model.currQuestion().text}<h2>
+        <h1 class= "grid-item col-3 question-text">${this.model.currQuestion().text}</h1>
         <p class="grid-row col-2 question-feedback">
           You got it!
         </p>
@@ -63,7 +64,7 @@ class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars
   _generateReviewIncorrect() {
     return `
       <div class="grid-row col-3">
-        <h2 class= "grid-item col-3 question-text">${this.model.currQuestion().text}<h2>
+        <h1 class= "grid-item col-3 question-text">${this.model.currQuestion().text}</h1>
         <p class="grid-row col-2 question-feedback">
           Sorry, that's incorrect.
         </p>
@@ -94,7 +95,7 @@ class QuizDisplay extends Renderer {    // eslint-disable-line no-unused-vars
     return `
       <div class="grid-row">
         <div class="grid-item col-3">
-          <h2>Good job!<h2>
+          <h1>Good job!</h1>
         </div>
         <p class="grid-row col-2">
           Your final score was<br>${this.model.score} out of ${this.model.asked.length}

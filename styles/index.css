@@ -16,6 +16,29 @@ button {
     font-family: 'Press Start 2P', cursive;
 }
 
+button:hover, label.radio:hover {
+    cursor: pointer;
+    background-color: rgb(238, 238, 238)
+}
+  
+button:hover:disabled, label.radio:hover:disabled {
+    cursor: default;
+}
+
+button:active {
+    box-shadow: 1px 2px #515151;
+    transform: translateY(4px);
+}
+
+button:focus {
+    outline:0;
+}
+
+label.radio:active {
+    box-shadow: 1px 2px #515151;
+    transform: translateY(4px);
+}
+
 h1, button {
     font-size: 20px;
 }
@@ -44,7 +67,13 @@ button {
     height: 35px;
     padding: 8px;
     background-color: white;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(192, 191, 191);
     border-radius: 7px;
+    box-shadow: 2px 4px #515151;
+    border-radius: 7px;
+    margin-top: 10px;
 }
 
 input[type="radio"] , label {
@@ -53,7 +82,30 @@ input[type="radio"] , label {
 }
 
 input[type="radio"] {
-    width: 15px;
+    /* width: 15px; */
+    display: none;
+}
+
+input[type="radio"]:checked + label.radio {
+    background-color: black;
+    color: white;
+}
+
+label.question-text {
+    margin-bottom: 10px;
+}
+
+label.radio {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
+    padding: 8px;
+    margin-bottom: 10px;
+    background-color: white;   
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(192, 191, 191);
+    border-radius: 7px;
+    box-shadow: 2px 4px #515151;
 }
 
 .grid-item {
@@ -65,12 +117,22 @@ input[type="radio"] {
     padding-bottom: 20px;
 }
 
-.question-correct, .new-high-score {
+.question-correct {
     color: darkgreen;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
 }
 
 .question-incorrect {
     color: darkred;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
+}
+
+.new-high-score {
+    color: darkgreen;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 18px;
 }
 
 .status-elem {
@@ -84,11 +146,5 @@ input[type="radio"] {
 
 .question-feedback {
     font-size: 16px;
-}
-
-.question-correct, 
-.question-incorrect {
-    font-family: 'Roboto', sans-serif; 
-    font-size: 18px;
-    font-weight: 900;
+    margin-bottom: 8px;
 }
